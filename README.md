@@ -1,7 +1,8 @@
 [![version](https://img.shields.io/badge/version-master-red.svg)](https://github.com/huttopia/doctrine)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-^2.5-blue.svg)](http://www.doctrine-project.org)
-![Lines](https://img.shields.io/badge/code%20lines-227-green.svg)
+[![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
+![Lines](https://img.shields.io/badge/code%20lines-694-green.svg)
 ![Total Downloads](https://poser.pugx.org/huttopia/doctrine/downloads)
 
 ### huttopia/doctrine
@@ -27,6 +28,41 @@ Add it to your composer.json :
 composer require huttopia/doctrine dev-master
 ```
 
+Register HuttopiaDoctrineBundle :
+```php
+# app/AppKernel.php
+
+class AppKernel extends Kernel
+{
+    public function registerBundles(): array
+    {
+        $bundles = [
+            new Huttopia\Doctrine\Bridge\Symfony3\HuttopiaDoctrineBundle()
+        ];
+
+        return $bundles;
+    }
+}
+```
+
+Change Doctrine configuration :
+```yml
+# app/config/config.yml
+
+doctrine:
+    orm:
+        repository_factory: huttopia.doctrine.repository_factory
+        default_repository_class: Huttopia\Doctrine\Orm\EntityRepository
+```
+
+Configuration :
+```yml
+# app/config/config.yml
+
+huttopia_doctrine:
+    repository_factory_service: huttopia.doctrine.repository_factory # this is default value
+```
+
 ### Doctrine bugs
 
 Bugs who are fixed or not fixed by Doctrine, for some reasons :
@@ -34,6 +70,40 @@ Bugs who are fixed or not fixed by Doctrine, for some reasons :
 - [#6042 (not fixed)](https://github.com/doctrine/doctrine2/issues/6042) getId() lazy load entity if getId() is in trait : not fixed, just to remember why we don't use trait for getId()
 - [#6110 (fixed)](https://github.com/doctrine/doctrine2/pull/6110) Clear $this->collection even when empty, to reset keys
 - [#6509 (not fixed)](https://github.com/doctrine/doctrine2/issues/6509) PersistentCollection::clear() and removeElement() with orphanRemoval will remove tour entity, although you don't want
+
+### Repositories as service
+
+Yes, you need it too ;) Repositories as service is one of the biggest improvement.
+
+Now, we can define your repository as service, with huttopia.repository tag :
+```yml
+services:
+    bar_repository:
+        class: Foo\Repository\BarRepository
+        arguments: ['@service', '%parameter%']
+        tags:
+            - { name: huttopia.repository, entity: Foo\Bar }
+
+```
+
+You need to change _extends Doctrine\ORM\EntityRepository_ by _extends Huttopia\Doctrine\Orm\EntityRepository_ in your repositories.
+
+Take care, our repository remove magic methods (findOneById() for example).
+
+But it add a lot of methods :
+- getClassName(): string
+- getClassTableName(): string
+- createQueryBuilderWithoutSelect(string $alias, string $indexBy = null): QueryBuilder
+- get(int $id): Entity
+- getOneBy(array $criteria, array $orderBy = null): Entity
+- countAll(): int
+- countBy(array $params): int
+- findReadOnlyBy(array $criteria, array $fields = null, array $orderBy = null, $limit = null, $offset = null): array
+- getPartialReference(int $id)
+
+Difference between find() and get(), and findOneBy() and getOneBy() : when entity is not found, find() will return null, as get() will throw an exception.
+
+When you use PARTIAL, you can call createQueryBuilderWithoutSelect() instead of createQueryBuilder(), who will not select all root entity fields.
 
 ### Remove useless discriminator in SQL for single table inheritance
 
@@ -54,12 +124,24 @@ $queryBuilder
 
 Add it for all queries :
 ```php
-$manager
-    ->getConfiguration()
-    ->setDefaultQueryHint(
-        Query::HINT_CUSTOM_OUTPUT_WALKER,
-        IgnoreDiscriminator::class
-    );
+# app/AppKernel.php
+
+class AppKernel
+{
+    public function boot(): void
+    {
+        parent::boot();
+
+        foreach ($this->getContainer()->get('doctrine')->getManagers() as $manager) {
+            if ($manager instanceof EntityManagerInterface) {
+                $manager->getConfiguration()->setDefaultQueryHint(
+                    Query::HINT_CUSTOM_OUTPUT_WALKER,
+                    IgnoreDiscriminator::class
+                );
+            }
+        }
+    }
+}
 ```
 
 ### Enable steevanb/doctrine-events
