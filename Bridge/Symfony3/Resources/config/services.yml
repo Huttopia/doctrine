@@ -1,0 +1,3 @@
+services:
+    huttopia.doctrine.repository_factory:
+        class: Huttopia\Doctrine\Orm\Repository\RepositoryFactory
