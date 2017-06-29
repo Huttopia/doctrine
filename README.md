@@ -18,7 +18,7 @@ We can add features too.
 We decide to not fork Doctrine, because we want to follow Doctrine releases. Forking it now is nice and amazing, but in 2 years...
 
 When we need to override a class, we do it with [steevanb/composer-overload-class](https://github.com/steevanb/composer-overload-class).
-That's a good way when you need it, without renaming namespace everywhere (we can't, that's not a fork ;)). 
+That's a good way when you need it, without renaming namespace everywhere (we can't, that's not a fork ;)).
 
 [Changelog](changelog.md)
 
@@ -155,10 +155,7 @@ flush() will read UnitOfWork::$orphanRemovals, and delete all entities, although
 
 So, if you remove an entity, then add it again, then flush(), finally, your entity will be deleted.
 
-To fix it, we override _PersistentCollection_, and remove all _orphanRemoval_ managements in it.
-Take care with it, you need to manually remove link between entities now (as we should do).
-
-For example, User -> oneToMany -> Comment : you need to call _$comment->setUser(null)_ in _User::removeComment(Comment $comment)_.
+To fix it, we override _PersistentCollection_, and unschedule orphanRemovals when we add entity to PersistentCollection.
 
 See [ComposerOverloadClass installation](https://github.com/steevanb/composer-overload-class).
 

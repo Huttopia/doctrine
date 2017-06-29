@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  * Moslty copied from Doctrine PersistentCollection
  *
  * https://github.com/doctrine/doctrine2/issues/6509
- * Removed all oprhanRemoval management (remove(), removeElement(), clear())
+ * Unschedule orphanRemovals in set() and add()
  */
 class PersistentCollection extends AbstractLazyCollection implements Selectable
 {
@@ -327,6 +327,13 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
 
         $this->changed();
 
+        if ($this->association !== null &&
+            $this->association['type'] & ClassMetadata::TO_MANY &&
+            $this->owner &&
+            $this->association['orphanRemoval']) {
+            $this->em->getUnitOfWork()->scheduleOrphanRemoval($removed);
+        }
+
         return $removed;
     }
 
@@ -356,6 +363,13 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
         }
 
         $this->changed();
+
+        if ($this->association !== null &&
+            $this->association['type'] & ClassMetadata::TO_MANY &&
+            $this->owner &&
+            $this->association['orphanRemoval']) {
+            $this->em->getUnitOfWork()->scheduleOrphanRemoval($element);
+        }
 
         return $removed;
     }
@@ -429,6 +443,7 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
     {
         parent::set($key, $value);
 
+        $this->unscheduleOrphanRemoval($value);
         $this->changed();
     }
 
@@ -438,7 +453,7 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
     public function add($value)
     {
         $this->collection->add($value);
-
+        $this->unscheduleOrphanRemoval($value);
         $this->changed();
 
         return true;
@@ -502,6 +517,18 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
         }
 
         $uow = $this->em->getUnitOfWork();
+
+        if ($this->association['type'] & ClassMetadata::TO_MANY &&
+            $this->association['orphanRemoval'] &&
+            $this->owner) {
+            // we need to initialize here, as orphan removal acts like implicit cascadeRemove,
+            // hence for event listeners we need the objects in memory.
+            $this->initialize();
+
+            foreach ($this->collection as $element) {
+                $uow->scheduleOrphanRemoval($element);
+            }
+        }
 
         $this->collection->clear();
 
@@ -655,5 +682,22 @@ class PersistentCollection extends AbstractLazyCollection implements Selectable
 
             $this->isDirty = true;
         }
+    }
+
+    protected function unscheduleOrphanRemoval($entity): self
+    {
+        $reflection = new \ReflectionProperty(UnitOfWork::class, 'orphanRemovals');
+        $reflection->setAccessible(true);
+
+        $orphanRemovals = $reflection->getValue($this->em->getUnitOfWork());
+        $hash = spl_object_hash($entity);
+        if (array_key_exists($hash, $orphanRemovals)) {
+            unset($orphanRemovals[$hash]);
+            $reflection->setValue($this->em->getUnitOfWork(), $orphanRemovals);
+        }
+
+        $reflection->setAccessible(false);
+
+        return $this;
     }
 }
