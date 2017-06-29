@@ -1,8 +1,8 @@
-[![version](https://img.shields.io/badge/version-master-red.svg)](https://github.com/huttopia/doctrine)
+[![version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/huttopia/doctrine)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-^2.5-blue.svg)](http://www.doctrine-project.org)
 [![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
-![Lines](https://img.shields.io/badge/code%20lines-694-green.svg)
+![Lines](https://img.shields.io/badge/code%20lines-707-green.svg)
 ![Total Downloads](https://poser.pugx.org/huttopia/doctrine/downloads)
 
 ### huttopia/doctrine
@@ -20,12 +20,14 @@ We decide to not fork Doctrine, because we want to follow Doctrine releases. For
 When we need to override a class, we do it with [steevanb/composer-overload-class](https://github.com/steevanb/composer-overload-class).
 That's a good way when you need it, without renaming namespace everywhere (we can't, that's not a fork ;)). 
 
+[Changelog](changelog.md)
+
 ### Installation
 
 Add it to your composer.json :
 
 ```bash
-composer require huttopia/doctrine dev-master
+composer require huttopia/doctrine ^1.0
 ```
 
 Register HuttopiaDoctrineBundle :
