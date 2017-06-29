@@ -1,8 +1,8 @@
-[![version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/huttopia/doctrine)
+[![version](https://img.shields.io/badge/version-1.1.0-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.1.0)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-^2.5-blue.svg)](http://www.doctrine-project.org)
 [![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
-![Lines](https://img.shields.io/badge/code%20lines-707-green.svg)
+![Lines](https://img.shields.io/badge/code%20lines-1422-green.svg)
 ![Total Downloads](https://poser.pugx.org/huttopia/doctrine/downloads)
 
 ### huttopia/doctrine
@@ -27,7 +27,7 @@ That's a good way when you need it, without renaming namespace everywhere (we ca
 Add it to your composer.json :
 
 ```bash
-composer require huttopia/doctrine ^1.0
+composer require huttopia/doctrine ^1.1
 ```
 
 Register HuttopiaDoctrineBundle :
@@ -68,10 +68,10 @@ huttopia_doctrine:
 ### Doctrine bugs
 
 Bugs who are fixed or not fixed by Doctrine, for some reasons :
-- [steevanb/doctrine-events](https://github.com/steevanb/doctrine-events) Fix a Doctrine UnitOfwork bug with extraUpdates, who are not removed when you add and remove your entity before calling flush()
+- [fixed by steevanb/doctrine-events](https://github.com/steevanb/doctrine-events) Fix a Doctrine UnitOfwork bug with extraUpdates, who are not removed when you add and remove your entity before calling flush()
 - [#6042 (not fixed)](https://github.com/doctrine/doctrine2/issues/6042) getId() lazy load entity if getId() is in trait : not fixed, just to remember why we don't use trait for getId()
 - [#6110 (fixed)](https://github.com/doctrine/doctrine2/pull/6110) Clear $this->collection even when empty, to reset keys
-- [#6509 (not fixed)](https://github.com/doctrine/doctrine2/issues/6509) PersistentCollection::clear() and removeElement() with orphanRemoval will remove tour entity, although you don't want
+- [#6509 (fixed here)](https://github.com/doctrine/doctrine2/issues/6509) PersistentCollection::clear() and removeElement() with orphanRemoval will remove tour entity, although you don't want
 
 ### Repositories as service
 
@@ -140,6 +140,37 @@ class AppKernel
                     Query::HINT_CUSTOM_OUTPUT_WALKER,
                     IgnoreDiscriminator::class
                 );
+            }
+        }
+    }
+}
+```
+
+### [#6509](https://github.com/doctrine/doctrine2/issues/6509) Fix PersistentCollection orphanRemoval management
+
+When you call _remove()_, _removeElement()_ or _clear()_ on _PersistentCollection_, and your manyToOne configuration define _orphanRemoval_ as true,
+PersistentCollection will add your deleted entity in UnitOfWork::$orphanRemovals.
+
+flush() will read UnitOfWork::$orphanRemovals, and delete all entities, although they are deleted then added.
+
+So, if you remove an entity, then add it again, then flush(), finally, your entity will be deleted.
+
+To fix it, we override _PersistentCollection_, and remove all _orphanRemoval_ managements in it.
+Take care with it, you need to manually remove link between entities now (as we should do).
+
+For example, User -> oneToMany -> Comment : you need to call _$comment->setUser(null)_ in _User::removeComment(Comment $comment)_.
+
+See [ComposerOverloadClass installation](https://github.com/steevanb/composer-overload-class).
+
+Override _PersistentCollection_ to fix it :
+```yml
+{
+    "extra": {
+        "composer-overload-class": {
+            "Doctrine\\ORM\\PersistentCollection": {
+                "original-file": "vendor/doctrine/orm/lib/Doctrine/ORM/PersistentCollection.php",
+                "overload-file": "vendor/huttopia/doctrine/ComposerOverloadClass/Orm/PersistentCollection.php",
+                "replace": true
             }
         }
     }
