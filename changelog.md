@@ -1,3 +1,7 @@
+### [1.2.0](../../compare/1.1.0...1.2.0) (2017-06-29)
+
+- Update _steevanb/composer-overload-class_ dependency to 1.3.0
+
 ### [1.1.0](../../compare/1.0.0...1.1.0) (2017-06-29)
 
 - Fix [#6509](https://github.com/doctrine/doctrine2/issues/6509): PersistentCollection orphanRemoval management
