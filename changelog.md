@@ -1,3 +1,7 @@
+### [1.2.1](../../compare/1.2.0...1.2.1) (2017-07-26)
+
+- Fix doctrine to 2.5.* : 2.6 has wrong tag (some dependencies are on dev-master, whithout version), some BC etc
+
 ### [1.2.0](../../compare/1.1.0...1.2.0) (2017-06-29)
 
 - Update _steevanb/composer-overload-class_ dependency to 1.3.0

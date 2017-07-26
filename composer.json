@@ -11,9 +11,9 @@
     "require": {
         "php": ">=7.1.3",
 
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "2.5.*",
         "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-cache-bundle": "^1.2",
+        "doctrine/doctrine-cache-bundle": "^1.3",
         
         "steevanb/doctrine-read-only-hydrator": "^2.2",
         "steevanb/doctrine-entity-merger": "^1.0",
