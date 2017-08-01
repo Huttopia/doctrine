@@ -1,3 +1,7 @@
+### [1.2.2](../../compare/1.2.1...1.2.2) (2017-08-01)
+
+- Fix doctrine to 2.5.6 : >2.5.6 and 2.6.* has wrong tag (some dependencies are on dev-master, whithout version), some BC etc
+
 ### [1.2.1](../../compare/1.2.0...1.2.1) (2017-07-26)
 
 - Fix doctrine to 2.5.* : 2.6 has wrong tag (some dependencies are on dev-master, whithout version), some BC etc
