@@ -145,6 +145,13 @@ class EntityRepository implements ObjectRepository
         if ($fields === null) {
             $queryBuilder = $this->createQueryBuilder('entity');
         } else {
+            $singleIdentifier = $this
+                ->getEntityManager()
+                ->getClassMetadata($this->getClassName())
+                ->getSingleIdentifierFieldName();
+            if (empty($singleIdentifier) === false && in_array($singleIdentifier, $fields) === false) {
+                array_unshift($fields, $singleIdentifier);
+            }
             $queryBuilder = $this
                 ->createQueryBuilderWithoutSelect('entity')
                 ->select('PARTIAL entity.{' . implode(', ', $fields) . '}');
