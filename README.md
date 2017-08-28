@@ -1,18 +1,18 @@
-[![version](https://img.shields.io/badge/version-1.2.2-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.2.2)
+[![version](https://img.shields.io/badge/version-1.2.3-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.2.3)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-2.5.6-blue.svg)](http://www.doctrine-project.org)
 [![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
-![Lines](https://img.shields.io/badge/code%20lines-1479-green.svg)
+![Lines](https://img.shields.io/badge/code%20lines-1490-green.svg)
 ![Total Downloads](https://poser.pugx.org/huttopia/doctrine/downloads)
 
 ### huttopia/doctrine
 
 Doctrine is a really good ORM, with nice features, we love it !
 
-But, to be honest, no major version since 2 april 2015, several bugs are not fixed
+But, to be honest, no major version since 2 april 2015 (2.6 is here, but too much bugs for now), several bugs are not fixed
 and it takes too much time to create patch version when you create a PR to fix something.
 
-So, we decided to create huttopia/doctrine, to fix what we need, without waiting for a release.
+So, we decided to create _huttopia/doctrine_, to fix what we need, without waiting for a release.
 We can add features too.
 
 We decide to not fork Doctrine, because we want to follow Doctrine releases. Forking it now is nice and amazing, but in 2 years...
