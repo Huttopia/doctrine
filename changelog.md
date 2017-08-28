@@ -1,6 +1,6 @@
 ### [1.2.3](../../compare/1.2.2...1.2.3) (2017-08-28)
 
-[https://github.com/Huttopia/doctrine/pull/9](#9) Add entity single identifier to _EntityRepository::findReadOnlyBy()_ is not asked in _$fields_
+[#9](https://github.com/Huttopia/doctrine/pull/9) Add entity single identifier to _EntityRepository::findReadOnlyBy()_ if it's not asked in _$fields_
 
 ### [1.2.2](../../compare/1.2.1...1.2.2) (2017-08-01)
 
