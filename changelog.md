@@ -1,3 +1,7 @@
+### [1.3.0](../../compare/1.2.3...1.3.0) (2017-09-05)
+
+- Add _$rsmbCallable_ parameter to _EntityRepository::createQueryFromRawSql()_, to add joined entities mapping to _ResultSetMappingBuilder_ for example
+
 ### [1.2.3](../../compare/1.2.2...1.2.3) (2017-08-28)
 
 [#9](https://github.com/Huttopia/doctrine/pull/9) Add entity single identifier to _EntityRepository::findReadOnlyBy()_ if it's not asked in _$fields_
