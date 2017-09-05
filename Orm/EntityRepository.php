@@ -15,6 +15,7 @@ use Doctrine\ORM\{
     Query\ResultSetMappingBuilder,
     QueryBuilder
 };
+use Huttosoft\Core\User\Entity\Role;
 use steevanb\DoctrineReadOnlyHydrator\Hydrator\ReadOnlyHydrator;
 
 class EntityRepository implements ObjectRepository
@@ -215,10 +216,13 @@ class EntityRepository implements ObjectRepository
         return $this;
     }
 
-    protected function createQueryFromRawSql(string $alias, string $sql): NativeQuery
+    protected function createQueryFromRawSql(string $alias, string $sql, callable $rsmbCallable = null): NativeQuery
     {
         $rsmb = new ResultSetMappingBuilder($this->getEntityManager());
         $rsmb->addRootEntityFromClassMetadata($this->getClassName(), $alias);
+        if (is_callable($rsmbCallable)) {
+            call_user_func($rsmbCallable, $rsmb);
+        }
 
         return $this->getEntityManager()->createNativeQuery($sql, $rsmb);
     }

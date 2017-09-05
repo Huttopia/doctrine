@@ -1,8 +1,8 @@
-[![version](https://img.shields.io/badge/version-1.2.3-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.2.3)
+[![version](https://img.shields.io/badge/version-1.3.0-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.3.0)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-2.5.6-blue.svg)](http://www.doctrine-project.org)
 [![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
-![Lines](https://img.shields.io/badge/code%20lines-1490-green.svg)
+![Lines](https://img.shields.io/badge/code%20lines-1498-green.svg)
 ![Total Downloads](https://poser.pugx.org/huttopia/doctrine/downloads)
 
 ### huttopia/doctrine
