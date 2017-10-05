@@ -15,7 +15,6 @@ use Doctrine\ORM\{
     Query\ResultSetMappingBuilder,
     QueryBuilder
 };
-use Huttosoft\Core\User\Entity\Role;
 use steevanb\DoctrineReadOnlyHydrator\Hydrator\ReadOnlyHydrator;
 
 class EntityRepository implements ObjectRepository
@@ -187,7 +186,16 @@ class EntityRepository implements ObjectRepository
             ->getEntityManager()
             ->getUnitOfWork()
             ->getEntityPersister($this->getClassName())
-            ->load($criteria, null, null, [], null, 1, $orderBy);
+            ->load(
+                $criteria,
+                null,
+                null,
+                // https://github.com/doctrine/doctrine2/issues/6751
+                $this->getEntityManager()->getConfiguration()->getDefaultQueryHints(),
+                null,
+                1,
+                $orderBy
+            );
     }
 
     /** @return object|Proxy */
