@@ -1,3 +1,7 @@
+### [1.3.1](../../compare/1.3.0...1.3.1) (2017-10-05)
+
+- Fix Doctrie issue [#6751](https://github.com/doctrine/doctrine2/issues/6751) for _findBy()_ and _findOneBy()_
+
 ### [1.3.0](../../compare/1.2.3...1.3.0) (2017-09-05)
 
 - Add _$rsmbCallable_ parameter to _EntityRepository::createQueryFromRawSql()_, to add joined entities mapping to _ResultSetMappingBuilder_ for example
