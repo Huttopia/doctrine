@@ -1,3 +1,7 @@
+### [1.3.2](../../compare/1.3.1...1.3.2) (2017-10-06)
+
+- Revert fix Doctrie issue [#6751](https://github.com/doctrine/doctrine2/issues/6751), PARTIAL with Collection have too much bugs to work
+
 ### [1.3.1](../../compare/1.3.0...1.3.1) (2017-10-05)
 
 - Fix Doctrie issue [#6751](https://github.com/doctrine/doctrine2/issues/6751) for _findBy()_ and _findOneBy()_

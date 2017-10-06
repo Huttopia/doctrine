@@ -1,4 +1,4 @@
-[![version](https://img.shields.io/badge/version-1.3.1-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.3.1)
+[![version](https://img.shields.io/badge/version-1.3.2-green.svg)](https://github.com/huttopia/doctrine/releases/tag/1.3.2)
 [![symfony](https://img.shields.io/badge/php-^7.1.3-blue.svg)](http://www.php.net)
 [![symfony](https://img.shields.io/badge/doctrine/orm-2.5.6-blue.svg)](http://www.doctrine-project.org)
 [![symfony](https://img.shields.io/badge/symfony/symfony-^3.0-blue.svg)](https://symfony.com/)
@@ -27,7 +27,7 @@ That's a good way when you need it, without renaming namespace everywhere (we ca
 Add it to your composer.json :
 
 ```bash
-composer require huttopia/doctrine ^1.3
+composer require huttopia/doctrine ^1.3.2
 ```
 
 Register HuttopiaDoctrineBundle :
@@ -72,7 +72,6 @@ Bugs who are fixed or not fixed by Doctrine, for some reasons :
 - [#6042 (not fixed)](https://github.com/doctrine/doctrine2/issues/6042) getId() lazy load entity if getId() is in trait : not fixed, just to remember why we don't use trait for getId()
 - [#6110 (fixed)](https://github.com/doctrine/doctrine2/pull/6110) Clear $this->collection even when empty, to reset keys
 - [#6509 (fixed here)](https://github.com/doctrine/doctrine2/issues/6509) PersistentCollection::clear() and removeElement() with orphanRemoval will remove your entity, although you don't want
-- [#6751 (fixed here)](https://github.com/doctrine/doctrine2/issues/6751) EntityRepository::findBy() and findOneBy() don't add default query hints, findAll() is not fixed
 
 For now, we fix 2.5.6 for doctrine/orm dependency : >2.5.6 and 2.6 has wrong tag (some dependencies are on dev-master, whithout version), some BC etc.
 
