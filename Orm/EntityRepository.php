@@ -94,7 +94,7 @@ class EntityRepository implements ObjectRepository
     {
         $queryBuilder = $this
             ->createQueryBuilderWithoutSelect('entityToCount', null)
-            ->select('COUNT(entityToCount)');
+            ->select('COUNT(DISTINCT entityToCount)');
 
         foreach ($params as $name => $value) {
             $sql = (is_array($value)) ? ' IN (:' . $name . 'Value)' : ' = :' . $name . 'Value';
