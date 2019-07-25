@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Huttopia\Doctrine\Orm;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\{
     EntityManagerInterface,
